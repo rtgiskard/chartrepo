@@ -152,6 +152,24 @@ data:
         {{- end }}
       {{- end }}
     {{- end }}
+    {{- if .Values.configMap.administration.enable }}
+    administration:
+      enable: {{ .Values.configMap.administration.enable }}
+      users:
+      {{- if gt (len .Values.configMap.administration.users) 0 }}
+      {{- range .Values.configMap.administration.users }}
+      - {{ . | squote }}
+      {{- end }}
+      {{- else }} []
+      {{- end }}
+      groups:
+      {{- if gt (len .Values.configMap.administration.groups) 0 }}
+      {{- range .Values.configMap.administration.groups }}
+      - {{ . | squote }}
+      {{- end }}
+      {{- else }} []
+      {{- end }}
+    {{- end }}
     identity_validation:
       elevated_session:
         code_lifespan: {{ include "authelia.func.dquote" (.Values.configMap.identity_validation.elevated_session.code_lifespan | default "5 minutes") }}

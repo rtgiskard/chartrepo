@@ -1,0 +1,8 @@
+configMap:
+  administration:
+    enable: true
+    groups:
+      - admin
+  session:
+    cookies:
+      - domain: example.com

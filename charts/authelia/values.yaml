@@ -1271,6 +1271,24 @@ configMap:
       # access_level:
         # expression: '"admin" in groups ? 10 : 5'
 
+  administration:
+    # -- Enables the administration API.
+    enable: false
+
+    # @schema
+    # items:
+    #   type: string
+    # @schema
+    # -- List of users permitted to use administration API actions.
+    users: []
+
+    # @schema
+    # items:
+    #   type: string
+    # @schema
+    # -- List of groups permitted to use administration API actions.
+    groups: []
+
   identity_validation:
     reset_password:
       # @schema

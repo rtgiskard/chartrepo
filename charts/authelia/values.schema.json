@@ -116,6 +116,38 @@
           "title": "access_control",
           "type": "object"
         },
+        "administration": {
+          "additionalProperties": false,
+          "properties": {
+            "enable": {
+              "default": false,
+              "description": "Enables the administration API.",
+              "title": "enable",
+              "type": "boolean"
+            },
+            "groups": {
+              "description": "List of groups permitted to use administration API actions.",
+              "items": {
+                "type": "string"
+              },
+              "required": [],
+              "title": "groups"
+            },
+            "users": {
+              "description": "List of users permitted to use administration API actions.",
+              "items": {
+                "type": "string"
+              },
+              "required": [],
+              "title": "users"
+            }
+          },
+          "required": [
+            "enable"
+          ],
+          "title": "administration",
+          "type": "object"
+        },
         "annotations": {
           "additionalProperties": true,
           "description": "Extra annotations for the ConfigMap manifest.",
@@ -4823,6 +4855,7 @@
         "default_2fa_method",
         "theme",
         "definitions",
+        "administration",
         "identity_validation",
         "totp",
         "webauthn",
