@@ -1,0 +1,62 @@
+name: Publish OCI Helm Charts
+
+on:
+  push:
+    branches:
+      - dev
+    tags:
+      - 'authelia-*'
+    paths:
+      - 'charts/**'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-oci:
+    runs-on: ubuntu-latest
+    env:
+      CR_USERNAME: ${{ github.actor }}
+      CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OCI_REGISTRY_OWNER: ${{ github.repository_owner }}
+      OCI_REGISTRY_REPO: chartrepo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        run: |
+          set -euo pipefail
+          HELM_VERSION=3.18.3
+          curl -fsSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" -o /tmp/helm.tar.gz
+          tar -xzf /tmp/helm.tar.gz -C /tmp
+          sudo install -m 0755 /tmp/linux-amd64/helm /usr/local/bin/helm
+          helm version --short
+
+      - name: Install chart-testing
+        run: |
+          set -euo pipefail
+          CT_VERSION=3.14.0
+          curl -fsSL "https://github.com/helm/chart-testing/releases/download/v${CT_VERSION}/chart-testing_${CT_VERSION}_linux_amd64.tar.gz" -o /tmp/ct.tar.gz
+          tar -xzf /tmp/ct.tar.gz -C /tmp
+          sudo install -m 0755 /tmp/ct /usr/local/bin/ct
+          ct version
+
+      - name: Install chart-releaser
+        run: |
+          set -euo pipefail
+          CR_VERSION=1.8.0
+          curl -fsSL "https://github.com/helm/chart-releaser/releases/download/v${CR_VERSION}/chart-releaser_${CR_VERSION}_linux_amd64.tar.gz" -o /tmp/cr.tar.gz
+          tar -xzf /tmp/cr.tar.gz -C /tmp
+          sudo install -m 0755 /tmp/cr /usr/local/bin/cr
+          cr version
+
+      - name: Package and push OCI charts
+        run: |
+          set -euo pipefail
+          make release-package
+          make release-oci
