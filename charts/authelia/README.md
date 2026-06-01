@@ -1,6 +1,6 @@
 # authelia
 
-![Version: 0.11.6](https://img.shields.io/badge/Version-0.11.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.39.20](https://img.shields.io/badge/AppVersion-4.39.20-informational?style=flat-square)
+![Version: 0.11.7-r1](https://img.shields.io/badge/Version-0.11.7--r1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.39.20](https://img.shields.io/badge/AppVersion-4.39.20-informational?style=flat-square)
 
 Authelia is a Single Sign-On Multi-Factor portal for web apps
 
@@ -53,12 +53,11 @@ It is expected you will configure at least the following sections/values:
   in [the documentation](https://www.authelia.com/configuration))
   - The `configMap.session.cookies` section contains the domain configuration for the Authelia portal and session
     cookies:
-    - The full Authelia URL will be in the format of `https://[<subdomain>.]<domain>[:<port>][/<subpath>]` (part within the square braces is
+    - The full Authelia URL will be in the format of `https://[<subdomain>.]<domain>[/<subpath>]` (part within the square braces is
       omitted if not configured) i.e. `domain` of `example.com` and `subdomain` empty yields `https://example.com` and
-      `subdomain` of `auth` yields `https://auth.example.com`. The `port` and `subpath` are also optionally included.
+      `subdomain` of `auth` yields `https://auth.example.com`. The `subpath` is also optionally included.
     - The `domain` option is required.
     - The `subdomain` option is generally required.
-    - The `port` option is optional and only affects the generated Authelia URL. It does not affect the cookie domain.
     - The `path` option is generally **_NOT_** required or recommended. Every domain that has this option configured
       MUST have the same value i.e. you can have one blank and one configured but all those that are configured must be
       the same, and in addition if configured at all the `configMap.server.path` option must have the same value.
@@ -111,6 +110,9 @@ Kubernetes: `>= 1.30.0-0`
 | configMap.access_control.secret.enabled | bool | `false` | Enables the ACL section being generated as a secret. |
 | configMap.access_control.secret.existingSecret | string | `""` | An existingSecret name, if configured this will force the secret to be mounted using the key above. |
 | configMap.access_control.secret.key | string | `"configuration.acl.yaml"` | The key in the secret which contains the file to mount. |
+| configMap.administration.enable | bool | `false` | Enables the administration API. |
+| configMap.administration.groups | list | `[]` | List of groups permitted to use administration API actions. |
+| configMap.administration.users | list | `[]` | List of users permitted to use administration API actions. |
 | configMap.annotations | object | `{}` | Extra annotations for the ConfigMap manifest. |
 | configMap.authentication_backend.file.enabled | bool | `false` | Enable File Backend (Authentication). |
 | configMap.authentication_backend.file.extra_attributes | object | `{}` | The extra attributes to load from the directory server. These extra attributes can be used in other areas of Authelia such as OpenID Connect 1.0. It’s also recommended to check out the Attributes Reference Guide for more information. |
